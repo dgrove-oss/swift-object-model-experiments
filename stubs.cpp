@@ -13,6 +13,8 @@ struct Cell : HeapObject {
 static void deinitCell(HeapObject *_obj) {
 	Cell* obj = static_cast<Cell*>(_obj);
     printf("DeinitCell called on Cell with data %d\n", obj->data);
+	printf("My ref count %d\n",obj->refCount);
+	if (obj->next != NULL) { printf("Next's ref count %d\n",obj->next->refCount); }
 }
 
 static const FullMetadata<ClassMetadata> CellMetadata = {
@@ -23,9 +25,9 @@ static const FullMetadata<ClassMetadata> CellMetadata = {
 
 
 static Cell* allocCell(int x, Cell* n) {
-	Cell* result = static_cast<Cell*>(swift_allocObject(&CellMetadata, sizeof(Cell), alignof(Cell)-1));
+	auto result = static_cast<Cell*>(swift_allocObject(&CellMetadata, sizeof(Cell), alignof(Cell)-1));
 	result->data = x;
-	_swift_retain_inlined(result);
+	_swift_retain_inlined(n);
 	result->next = n;
 	return result;
 }
@@ -34,7 +36,11 @@ extern "C"
 Cell*
  _swift_make_cell(int x, Cell* next) {
 	// printf("Entered make_cell with next %p\n", next);
-	Cell * tmp = allocCell(x, next);
+	auto tmp = allocCell(x, next);
 	// printf("returning from make_cell with result %p and refcount %d\n",tmp, tmp->ho.refCount);
+
+	auto tmp2 = allocCell(100 + x, NULL);
+	swift_release(tmp2);
+	
 	return tmp;
 }
