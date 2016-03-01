@@ -11,7 +11,7 @@ struct Cell : HeapObject {
 };
 
 static void deinitCell(HeapObject *_obj) {
-	auto obj = static_cast<Cell*>(_obj);
+	Cell* obj = static_cast<Cell*>(_obj);
     printf("DeinitCell called on Cell with data %d\n", obj->data);
 }
 
@@ -23,11 +23,12 @@ static const FullMetadata<ClassMetadata> CellMetadata = {
 
 
 static Cell* allocCell(int x, Cell* n) {
-	auto result = static_cast<Cell*>(swift_allocObject(&CellMetadata, sizeof(Cell), alignof(Cell)-1));
+	Cell* result = static_cast<Cell*>(swift_allocObject(&CellMetadata, sizeof(Cell), alignof(Cell)-1));
 	result->data = x;
 	_swift_retain_inlined(result);
 	result->next = n;
-};
+	return result;
+}
 
 extern "C"
 Cell*
