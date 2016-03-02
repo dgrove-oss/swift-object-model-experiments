@@ -3,7 +3,7 @@ SWIFT_SRC=/home/vagrant/swift
 
 SWIFTC=$(SWIFT_TOOL_CHAIN)/bin/swiftc
 
-SWIFT_INCLUDES=-I$(SWIFT_SRC)/include -I$(SWIFT_SRC)/../llvm/include -I$(SWIFT_SRC)/../llbuild/include
+SWIFT_INCLUDES=-I$(SWIFT_SRC)/include
 
 RefCountTest: RefCountTest.swift RefCountStubs.o
 	$(SWIFTC) RefCountTest.swift RefCountStubs.o -o $@

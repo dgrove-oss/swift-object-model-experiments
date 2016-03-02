@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include <swift/Runtime/HeapObject.h>
-#include <swift/Runtime/Metadata.h>
 
 using namespace swift;
 
@@ -16,14 +15,9 @@ static void deinitCell(HeapObject *_obj) {
 	swift_release(obj->next);
 }
 
-static const FullMetadata<ClassMetadata> CellMetadata = {
-	{ { &deinitCell }, { &_TWVBo } },
-	{ { { MetadataKind::Class } }, 0, /*rodata*/ 1,
-	  ClassFlags::UsesSwift1Refcounting, nullptr, 0, 0, 0, 0, 0 }
-};
-
 static Cell* allocCell(int x, Cell* n) {
-	auto result = static_cast<Cell*>(swift_allocObject(&CellMetadata, sizeof(Cell), alignof(Cell)-1));
+	extern const HeapMetadata _TMC12RefCountTest4Cell; // Cell HeapMetadata
+	auto result = static_cast<Cell*>(swift_allocObject(&_TMC12RefCountTest4Cell, sizeof(Cell), alignof(Cell)-1));
 	result->data = x;
 	result->next = n;
 	return result;
@@ -31,7 +25,7 @@ static Cell* allocCell(int x, Cell* n) {
 
 extern "C"
 Cell*
- _swift_make_cell(int x, Cell* next) {
+_swift_make_cell(int x, Cell* next) {
 	return allocCell(x, next);
 }
 
