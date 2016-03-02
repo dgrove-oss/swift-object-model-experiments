@@ -48,6 +48,3 @@ _swift_dump_list(cell_t head) {
 	printf("End dump\n");
 	swift_release(orig);
 }
-
-
-			
