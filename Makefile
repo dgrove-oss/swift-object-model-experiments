@@ -5,11 +5,11 @@ SWIFTC=$(SWIFT_TOOL_CHAIN)/bin/swiftc
 
 SWIFT_INCLUDES=-I$(SWIFT_SRC)/include -I$(SWIFT_SRC)/../llvm/include -I$(SWIFT_SRC)/../llbuild/include
 
-SimpleTest: SimpleTest.swift stubs.o
-	$(SWIFTC) -v SimpleTest.swift stubs.o -o SimpleTest
+RefCountTest: RefCountTest.swift RefCountStubs.o
+	$(SWIFTC) RefCountTest.swift RefCountStubs.o -o $@
 
-stubs.o:	stubs.cpp
+RefCountStubs.o: RefCountStubs.cpp
 	clang -std=c++11 -c $(SWIFT_INCLUDES) $< -o $@
 
 clean:
-	rm -f SimpleTest *.o
+	rm -f RefCountTest *.o
