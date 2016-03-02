@@ -20,7 +20,7 @@ Test1:	Test1.swift DispatchLite.o DispatchLite.swiftmodule DispatchStubs.o
 	$(SWIFTC) -c $< -o $@
 
 %.swiftmodule: %.swift
-	$(SWIFTC) -emit-module $< -o $@
+	$(SWIFTC) -c -emit-module $< -o $@
 
 clean:
 	rm -f $(EXECUTABLES) *.o *.swiftmodule *.swiftdoc

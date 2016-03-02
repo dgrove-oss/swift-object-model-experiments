@@ -34,8 +34,8 @@ typedef struct dispatch_source_s {
 
 
 dispatch_queue_t dispatch_make_queue(int data1, int data2) {
-	extern const struct HeapMetadata _TMC13DispatchTypes13DispatchQueue; // DispatchQueue HeapMetadata
-	dispatch_queue_t result = (dispatch_queue_t)swift_allocObject(&_TMC13DispatchTypes13DispatchQueue,
+	extern const struct HeapMetadata _TMC12DispatchLite13DispatchQueue; // DispatchQueue HeapMetadata
+	dispatch_queue_t result = (dispatch_queue_t)swift_allocObject(&_TMC12DispatchLite13DispatchQueue,
 																  sizeof(dispatch_queue_s), 7);
 	result->queue_data_1 = data1;
 	result->queue_data_2 = data2;
