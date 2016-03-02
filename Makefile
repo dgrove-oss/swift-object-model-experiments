@@ -3,19 +3,24 @@ SWIFT_SRC=/home/vagrant/swift
 
 SWIFTC=$(SWIFT_TOOL_CHAIN)/bin/swiftc
 
-SWIFT_INCLUDES=-I$(SWIFT_SRC)/include
+EXECUTABLES=RefCountTest RefCountTestC
 
-RefCountTest: RefCountTest.swift RefCountStubs.o
-	$(SWIFTC) RefCountTest.swift RefCountStubs.o -o $@
+all: $(EXECUTABLES)
 
-RefCountTestC: RefCountTest.swift RefCountStubsC.o
-	$(SWIFTC) RefCountTest.swift RefCountStubsC.o -o $@
+RefCountTest: RefCountTest.o RefCountStubs.o
+	$(SWIFTC) RefCountTest.o RefCountStubs.o -o $@
+
+RefCountTestC: RefCountTest.o RefCountStubsC.o
+	$(SWIFTC) RefCountTest.o RefCountStubsC.o -o RefCountTestC
 
 %.o: %.cpp
-	clang -std=c++11 -c $(SWIFT_INCLUDES) $< -o $@
+	clang -std=c++11 -c -I$(SWIFT_SRC)/include $< -o $@
 
 %.o: %.c
-	clang -std=c11 -c $(SWIFT_INCLUDES) $< -o $@
+	clang -c -I$(SWIFT_SRC)/stdlib/public $< -o $@
+
+%.o: %.swift
+	$(SWIFTC) -c $< -o $@
 
 clean:
-	rm -f RefCountTest *.o
+	rm -f $(EXECUTABLES) *.o
