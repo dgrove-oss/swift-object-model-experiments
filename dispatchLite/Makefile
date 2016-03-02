@@ -17,10 +17,10 @@ Test1:	Test1.swift DispatchLite.o DispatchLite.swiftmodule DispatchStubs.o
 	clang -c -I$(SWIFT_SRC)/stdlib/public $< -o $@
 
 %.o: %.swift
-	$(SWIFTC) -c $< -o $@
+	$(SWIFTC) -parse-as-library -c -o $@ $<
 
 %.swiftmodule: %.swift
-	$(SWIFTC) -c -emit-module $< -o $@
+	$(SWIFTC) -emit-module -emit-module-path $@ $<
 
 clean:
 	rm -f $(EXECUTABLES) *.o *.swiftmodule *.swiftdoc
