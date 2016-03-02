@@ -11,7 +11,7 @@ struct Cell : HeapObject {
 
 static void deinitCell(HeapObject *_obj) {
 	Cell* obj = static_cast<Cell*>(_obj);
-    printf("DeinitCell called on Cell with data %d\n", obj->data);
+    printf("native deinitCell called on %p with data %d\n", obj, obj->data);
 	swift_release(obj->next);
 }
 
