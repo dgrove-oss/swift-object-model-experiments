@@ -2,16 +2,22 @@
 
 #include <SwiftShims/HeapObject.h>
 
+extern void swift_retain(struct HeapObject*);
+extern void swift_release(struct HeapObject*);
+extern struct HeapObject *swift_allocObject(struct HeapMetadata const *metadata,
+											size_t requiredSize,
+											size_t requiredAlignmentMask);
+
 typedef struct cell_s {
 	struct HeapObject ho;
 	int data;
 	struct cell_s* next;
 } cell_s; 
-
-typedef struct HeapObject* heap_object_t;
 typedef struct cell_s* cell_t;
 
-static void deinitCell(heap_object_t *_obj) {
+
+
+static void deinitCell(struct HeapObject *_obj) {
 	cell_t obj = (cell_t)(_obj);
     printf("native deinitCell called on %p with data %d\n", obj, obj->data);
 	swift_release(obj->next);
