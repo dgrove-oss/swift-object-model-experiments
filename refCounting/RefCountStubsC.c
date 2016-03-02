@@ -19,7 +19,7 @@ static void deinitCell(heap_object_t *_obj) {
 
 static cell_t allocCell(int x, cell_t n) {
 	extern const struct HeapMetadata _TMC12RefCountTest4Cell; // Cell HeapMetadata
-	cell_t result = (cell_t)swift_allocObject(&_TMC12RefCountTest4Cell, sizeof(cell_s), 15);
+	cell_t result = (cell_t)swift_allocObject(&_TMC12RefCountTest4Cell, sizeof(cell_s), 7);
 	result->data = x;
 	result->next = n;
 	return result;
