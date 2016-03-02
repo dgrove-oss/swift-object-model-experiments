@@ -8,8 +8,14 @@ SWIFT_INCLUDES=-I$(SWIFT_SRC)/include -I$(SWIFT_SRC)/../llvm/include -I$(SWIFT_S
 RefCountTest: RefCountTest.swift RefCountStubs.o
 	$(SWIFTC) RefCountTest.swift RefCountStubs.o -o $@
 
-RefCountStubs.o: RefCountStubs.cpp
+RefCountTestC: RefCountTest.swift RefCountStubsC.o
+	$(SWIFTC) RefCountTest.swift RefCountStubsC.o -o $@
+
+%.o: %.cpp
 	clang -std=c++11 -c $(SWIFT_INCLUDES) $< -o $@
+
+%.o: %.c
+	clang -std=c11 -c $(SWIFT_INCLUDES) $< -o $@
 
 clean:
 	rm -f RefCountTest *.o

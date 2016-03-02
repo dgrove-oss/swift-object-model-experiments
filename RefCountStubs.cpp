@@ -39,6 +39,7 @@ extern "C"
 void
 _swift_dump_list(Cell* head) {
 	Cell* orig = head;
+	printf("isa is %p\n", head->metadata);
 	printf("Start dump\n");
 	while (head != NULL) {
 		printf("\t%p data=%d, rc=%d\n", head, head->data, head->refCount);

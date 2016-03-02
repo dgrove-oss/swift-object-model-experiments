@@ -1,2 +1,3 @@
 *.o
-SimpleTest
+RefCountTest
+RefCountTestC
