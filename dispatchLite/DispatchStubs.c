@@ -43,52 +43,30 @@ dispatch_queue_t dispatch_make_queue(int data1, int data2) {
 }
 
 int dispatch_increase_data(dispatch_queue_t dq, int inc) {
-	printf("%p has isa %p\n", dq, dq->ho.metadata);
+	printf("%p has isa %p and refcount %d\n", dq, dq->ho.metadata, dq->ho.refCount);
 	int old = dq->queue_data_2;
 	dq->queue_data_2 += inc;
+	swift_release(dq); /// TODO: This is not what we want.  Caller needs to not retain dq!
 	return old;
 }
 		
 		
-extern dispatch_source_t dispatch_make_source(int);
-
-extern void dispatch_release(dispatch_object_t);
-
-extern void dispatch_retain(dispatch_object_t);
-
-
-
-
-/*
-static void deinitCell(heap_object_t *_obj) {
-	cell_t obj = (cell_t)(_obj);
-    printf("native deinitCell called on %p with data %d\n", obj, obj->data);
-	swift_release(obj->next);
-}
-
-static cell_t allocCell(int x, cell_t n) {
-	extern const struct HeapMetadata _TMC12RefCountTest4Cell; // Cell HeapMetadata
-	cell_t result = (cell_t)swift_allocObject(&_TMC12RefCountTest4Cell, sizeof(cell_s), 7);
-	result->data = x;
-	result->next = n;
+dispatch_source_t dispatch_make_source(int data) {
+	extern const struct HeapMetadata _TMC12DispatchLite14DispatchSource; // DispatchSource HeapMetadata
+	dispatch_source_t result = (dispatch_source_t)swift_allocObject(&_TMC12DispatchLite14DispatchSource,
+																	sizeof(dispatch_source_s), 7);
+	result->source_data_1 = data;
 	return result;
+}	
+
+extern void dispatch_release(dispatch_object_t obj) {
+	swift_release((struct HeapObject*)obj);
 }
 
-cell_t
-_swift_make_cell(int x, cell_t next) {
-	return allocCell(x, next);
+extern void dispatch_retain(dispatch_object_t obj) {
+	swift_retain((struct HeapObject*)obj);
 }
 
-void
-_swift_dump_list(cell_t head) {
-	cell_t orig = head;
-	printf("isa is %p\n", head->ho.metadata);
-	printf("Start dump\n");
-	while (head != NULL) {
-		printf("\t%p data=%d, rc=%d\n", head, head->data, head->ho.refCount);
-		head = head->next;
-	}
-	printf("End dump\n");
-	swift_release(orig);
-}
-*/
+
+
+
