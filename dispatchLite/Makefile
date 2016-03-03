@@ -10,6 +10,9 @@ all: libdispatchLite.so $(EXECUTABLES)
 Test1:	Test1.swift libdispatchLite.so
 	$(SWIFTC) -Xcc -fblocks -I . $< -o $@ -Xlinker -rpath -Xlinker . -Xlinker -L.
 
+Test1.sil:	Test1.swift libdispatchLite.so
+	$(SWIFTC) -Xcc -fblocks -I . -emit-sil $< -o $@ 
+
 libdispatchLite.so: DispatchLite.o DispatchStubs.o
 	clang -shared -fPIC DispatchLite.o DispatchStubs.o -o libdispatchLite.so
 

@@ -2,4 +2,5 @@
 *.so
 *.swiftmodule
 *.swiftdoc
+*.sil
 Test1
