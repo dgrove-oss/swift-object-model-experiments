@@ -1,4 +1,5 @@
 *.o
+*.so
 *.swiftmodule
 *.swiftdoc
 Test1

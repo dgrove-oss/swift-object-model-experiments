@@ -1,0 +1,7 @@
+module DispatchLite [system] {
+    header "dispatchAPI.h"
+    requires blocks
+    export *
+	link "dispatchLite"
+    link "BlocksRuntime"
+}

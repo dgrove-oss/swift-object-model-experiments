@@ -14,20 +14,32 @@ typedef struct dispatch_source_s* dispatch_source_t;
 
 typedef void (*dispatch_function_t)(void *);
 
+#ifdef __BLOCKS__
+typedef void (^dispatch_block_t)(void);
+#endif
+
 /*
  * A sampling of API functions from dispatch to
  * cover some of the interesting cases we have 
  * hit so far in the Swift import of dispatch on Linux
  */
 
-extern dispatch_queue_t dispatch_make_queue(int, int);
+dispatch_queue_t dispatch_make_queue(int, int);
 
-extern dispatch_source_t dispatch_make_source(int);
+dispatch_source_t dispatch_make_source(int);
 
-extern void dispatch_release(dispatch_object_t);
+void dispatch_release(dispatch_object_t);
 
-extern void dispatch_retain(dispatch_object_t);
+void dispatch_retain(dispatch_object_t);
 
-extern int dispatch_increase_data(dispatch_queue_t, int);
+int dispatch_increase_data(dispatch_queue_t, int);
 
-extern void dispatch_set_finalizer(dispatch_object_t, dispatch_function_t);
+void dispatch_set_finalizer(dispatch_object_t, dispatch_function_t);
+
+#ifdef __BLOCKS__
+void dispatch_async(dispatch_queue_t queue, dispatch_block_t block);
+#endif
+
+void
+dispatch_async_f(dispatch_queue_t queue, void *context, dispatch_function_t work);
+

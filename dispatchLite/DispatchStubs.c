@@ -33,7 +33,8 @@ typedef struct dispatch_source_s {
 
 
 
-dispatch_queue_t dispatch_make_queue(int data1, int data2) {
+dispatch_queue_t
+dispatch_make_queue(int data1, int data2) {
 	extern const struct HeapMetadata _TMC12DispatchLite13DispatchQueue; // DispatchQueue HeapMetadata
 	dispatch_queue_t result = (dispatch_queue_t)swift_allocObject(&_TMC12DispatchLite13DispatchQueue,
 																  sizeof(dispatch_queue_s), 7);
@@ -42,16 +43,17 @@ dispatch_queue_t dispatch_make_queue(int data1, int data2) {
 	return result;
 }
 
-int dispatch_increase_data(dispatch_queue_t dq, int inc) {
+int
+dispatch_increase_data(dispatch_queue_t dq, int inc) {
 	printf("%p has isa %p and refcount %d\n", dq, dq->ho.metadata, dq->ho.refCount);
 	int old = dq->queue_data_2;
 	dq->queue_data_2 += inc;
-	swift_release(dq); /// TODO: This is not what we want.  Caller needs to not retain dq!
 	return old;
 }
 		
 		
-dispatch_source_t dispatch_make_source(int data) {
+dispatch_source_t
+dispatch_make_source(int data) {
 	extern const struct HeapMetadata _TMC12DispatchLite14DispatchSource; // DispatchSource HeapMetadata
 	dispatch_source_t result = (dispatch_source_t)swift_allocObject(&_TMC12DispatchLite14DispatchSource,
 																	sizeof(dispatch_source_s), 7);
@@ -59,14 +61,32 @@ dispatch_source_t dispatch_make_source(int data) {
 	return result;
 }	
 
-extern void dispatch_release(dispatch_object_t obj) {
+void
+dispatch_release(dispatch_object_t obj) {
 	swift_release((struct HeapObject*)obj);
 }
 
-extern void dispatch_retain(dispatch_object_t obj) {
+void
+dispatch_retain(dispatch_object_t obj) {
 	swift_retain((struct HeapObject*)obj);
 }
 
+
+#ifdef __BLOCKS__
+void
+dispatch_async(dispatch_queue_t queue, dispatch_block_t block) {
+	printf("Simulating dispatch_async on %p %d %d by evaling block\n",queue,
+		   queue->queue_data_1, queue->queue_data_2);
+	block();
+}
+#endif
+
+void
+dispatch_async_f(dispatch_queue_t queue, void *context, dispatch_function_t work) {
+	printf("Simulating dispatch_async_f on %p %d %d by evaling block\n",queue,
+		   queue->queue_data_1, queue->queue_data_2);
+	work(context);
+}
 
 
 
