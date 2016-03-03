@@ -5,26 +5,25 @@ SWIFTC=$(SWIFT_TOOL_CHAIN)/bin/swiftc
 
 EXECUTABLES=Test1
 
-all: libdispatchLite.so $(EXECUTABLES)
+all: libdispatch.so $(EXECUTABLES)
 
-Test1:	Test1.swift libdispatchLite.so
+Test1:	Test1.swift libdispatch.so
 	$(SWIFTC) -Xcc -fblocks -I . $< -o $@ -Xlinker -rpath -Xlinker . -Xlinker -L.
 
-Test1.sil:	Test1.swift libdispatchLite.so
+Test1.sil:	Test1.swift libdispatch.so
 	$(SWIFTC) -Xcc -fblocks -I . -emit-sil $< -o $@ 
 
-libdispatchLite.so: DispatchLite.o DispatchStubs.o
-	clang -shared -fPIC DispatchLite.o DispatchStubs.o -o libdispatchLite.so
+libdispatch.so: Dispatch.o DispatchStubs.o
+	clang -shared -fPIC Dispatch.o DispatchStubs.o -o libdispatch.so
 
-DispatchLite.o: DispatchLite.swift DispatchLite.swiftmodule
+Dispatch.o: Dispatch.swift Dispatch.swiftmodule
 	$(SWIFTC) -Xcc -fblocks -I . -parse-as-library -c -o $@ $<
 
-DispatchLite.swiftmodule: DispatchLite.swift dispatchAPI.h 
-	$(SWIFTC) -Xcc -fblocks -Xcc -fmodule-map-file=module.map \
-		-emit-module -emit-module-path $@ $<
+Dispatch.swiftmodule: Dispatch.swift dispatchAPI.h 
+	$(SWIFTC) -Xcc -fblocks -Xcc -fmodule-map-file=module.map -emit-module -emit-module-path $@ $<
 
 %.o: %.c
 	clang -fPIC -fblocks -c -I$(SWIFT_SRC)/stdlib/public $< -o $@
 
 clean:
-	rm -f $(EXECUTABLES) *.o *.swiftmodule *.swiftdoc libdispatchLite.so
+	rm -f $(EXECUTABLES) *.o *.swiftmodule *.swiftdoc libdispatch.so
