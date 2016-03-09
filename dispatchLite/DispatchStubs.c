@@ -40,6 +40,7 @@ dispatch_make_queue(int data1, int data2) {
 																  sizeof(dispatch_queue_s), 7);
 	result->queue_data_1 = data1;
 	result->queue_data_2 = data2;
+	printf("make_queue: refcount on return %d\n",  result->ho.refCount);
 	return result;
 }
 
@@ -63,12 +64,26 @@ dispatch_make_source(int data) {
 
 void
 dispatch_release(dispatch_object_t obj) {
+	printf("release: refcount before %d\n",  obj->ho.refCount);
 	swift_release((struct HeapObject*)obj);
+	printf("release: refcount after %d\n",  obj->ho.refCount);
 }
 
 void
 dispatch_retain(dispatch_object_t obj) {
+	printf("retain: refcount before %d\n",  obj->ho.refCount);
 	swift_retain((struct HeapObject*)obj);
+	printf("retain: refcount after %d\n",  obj->ho.refCount);
+}
+
+void
+dispatch_suspend(dispatch_object_t obj) {
+	printf("suspend: %p with refcount %d\n", obj, obj->ho.refCount);
+}
+
+void
+dispatch_suspend_q(dispatch_queue_t obj) {
+	printf("suspend_q: %p with refcount %d\n", obj, obj->ho.refCount);
 }
 
 
@@ -89,4 +104,10 @@ dispatch_async_f(dispatch_queue_t queue, void *context, dispatch_function_t work
 }
 
 
-
+void * objc_retainAutoreleasedReturnValue(void *obj) {
+    if (obj) {
+		swift_retain(obj);
+        return obj;
+    }
+    else return NULL;
+}

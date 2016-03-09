@@ -18,12 +18,22 @@ typedef void (*dispatch_function_t)(void *);
 typedef void (^dispatch_block_t)(void);
 #endif
 
+#ifndef CF_RETURNS_RETAINED
+#if __has_feature(attribute_cf_returns_retained)
+#define CF_RETURNS_RETAINED __attribute__((cf_returns_retained))
+#else
+#define CF_RETURNS_RETAINED
+#endif
+#endif
+
+
 /*
  * A sampling of API functions from dispatch to
  * cover some of the interesting cases we have 
  * hit so far in the Swift import of dispatch on Linux
  */
 
+CF_RETURNS_RETAINED
 dispatch_queue_t dispatch_make_queue(int, int);
 
 dispatch_source_t dispatch_make_source(int);
@@ -31,6 +41,10 @@ dispatch_source_t dispatch_make_source(int);
 void dispatch_release(dispatch_object_t);
 
 void dispatch_retain(dispatch_object_t);
+
+void dispatch_suspend(dispatch_object_t);
+
+void dispatch_suspend_q(dispatch_queue_t);
 
 int dispatch_increase_data(dispatch_queue_t, int);
 
