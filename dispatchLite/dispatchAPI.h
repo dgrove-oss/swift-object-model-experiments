@@ -26,6 +26,7 @@ typedef void (^dispatch_block_t)(void);
 #endif
 #endif
 
+#define DISPATCH_RETURNS_RETAINED CF_RETURNS_RETAINED
 
 /*
  * A sampling of API functions from dispatch to
@@ -33,10 +34,11 @@ typedef void (^dispatch_block_t)(void);
  * hit so far in the Swift import of dispatch on Linux
  */
 
-CF_RETURNS_RETAINED
-dispatch_queue_t dispatch_make_queue(int, int);
+DISPATCH_RETURNS_RETAINED
+dispatch_queue_t dispatch_queue_create(int, int);
 
-dispatch_source_t dispatch_make_source(int);
+DISPATCH_RETURNS_RETAINED
+dispatch_source_t dispatch_source_create(int);
 
 void dispatch_release(dispatch_object_t);
 
