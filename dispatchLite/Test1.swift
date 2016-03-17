@@ -1,4 +1,5 @@
 import Dispatch
+import CDispatch
 
 func test() -> Void {
   let q = dispatch_queue_create(10,20)
