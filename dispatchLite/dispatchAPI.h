@@ -6,11 +6,13 @@
  */
 struct dispatch_object_s;
 struct dispatch_queue_s;
+struct dispatch_semaphore_s;
 struct dispatch_source_s;
 
 typedef struct dispatch_object_s* dispatch_object_t;
 typedef struct dispatch_queue_s* dispatch_queue_t;
 typedef struct dispatch_source_s* dispatch_source_t;
+typedef struct dispatch_semaphore_s* dispatch_semaphore_t;
 
 typedef void (*dispatch_function_t)(void *);
 
@@ -18,6 +20,7 @@ typedef void (*dispatch_function_t)(void *);
 typedef void (^dispatch_block_t)(void);
 #endif
 
+/*
 #ifndef CF_RETURNS_RETAINED
 #if __has_feature(attribute_cf_returns_retained)
 #define CF_RETURNS_RETAINED __attribute__((cf_returns_retained))
@@ -27,6 +30,7 @@ typedef void (^dispatch_block_t)(void);
 #endif
 
 #define DISPATCH_RETURNS_RETAINED CF_RETURNS_RETAINED
+*/
 
 /*
  * A sampling of API functions from dispatch to
@@ -34,11 +38,14 @@ typedef void (^dispatch_block_t)(void);
  * hit so far in the Swift import of dispatch on Linux
  */
 
-DISPATCH_RETURNS_RETAINED
+//DISPATCH_RETURNS_RETAINED
 dispatch_queue_t dispatch_queue_create(int, int);
 
-DISPATCH_RETURNS_RETAINED
+//DISPATCH_RETURNS_RETAINED
 dispatch_source_t dispatch_source_create(int);
+
+//DISPATCH_RETURNS_RETAINED
+dispatch_semaphore_t dispatch_semaphore_create();
 
 void dispatch_release(dispatch_object_t);
 
@@ -58,4 +65,5 @@ void dispatch_async(dispatch_queue_t queue, dispatch_block_t block);
 
 void
 dispatch_async_f(dispatch_queue_t queue, void *context, dispatch_function_t work);
+
 

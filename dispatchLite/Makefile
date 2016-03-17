@@ -1,5 +1,4 @@
 SWIFT_TOOL_CHAIN=/home/vagrant/swift-local-install/usr
-SWIFT_SRC=/home/vagrant/swift
 
 SWIFTC=$(SWIFT_TOOL_CHAIN)/bin/swiftc
 
@@ -23,7 +22,7 @@ Dispatch.swiftmodule: Dispatch.swift dispatchAPI.h
 	$(SWIFTC) -Xcc -fblocks -Xcc -fmodule-map-file=module.map -emit-module -emit-module-path $@ $<
 
 %.o: %.c
-	clang -fPIC -fblocks -c -I$(SWIFT_SRC)/stdlib/public $< -o $@
+	clang -fPIC -fblocks -c $< -o $@
 
 clean:
 	rm -f $(EXECUTABLES) *.o *.swiftmodule *.swiftdoc libdispatch.so

@@ -1,7 +1,10 @@
 module Dispatch [system] {
-    header "dispatchAPI.h"
     requires blocks
-    export *
 	link "dispatch"
     link "BlocksRuntime"
+	
+    module CDispatch {
+        header "dispatchAPI.h"
+        export *
+    }
 }

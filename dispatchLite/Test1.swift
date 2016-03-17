@@ -8,6 +8,7 @@ func test() -> Void {
   dispatch_suspend(q)
   dispatch_suspend_q(q)
   dispatch_increase_data(q, o3)
+  dispatch_semaphore_create()
 }
 
 func test2() -> Void {
